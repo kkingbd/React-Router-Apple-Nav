@@ -1,10 +1,10 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import './App.css';
-import { Route, withRouter} from "react-router-dom";
-// import { TransitionGroup, CSSTransition } from "react-transition-group";
+import { Route, withRouter, Switch} from "react-router-dom";
+import { TransitionGroup,CSSTransition } from "react-transition-group";
 import data from "./data";
-import Home from "./components/Home";
-// import SubNav from "./components/SubNav";
+import Nav from "./components/Nav";
+import SubNav from "./components/SubNav";
 
 class App extends Component {
   constructor(){
@@ -16,7 +16,21 @@ class App extends Component {
   render() {
     return (
       <div className ='App'>
-        <Route path = '/' render= {props => <Home {...props} data = {this.state.data} /> } />
+        <Route path = '/' render= {props => <Nav {...props} data = {this.state.data} /> } />
+          <Fragment>  
+            <TransitionGroup style={{opacity: .95}}>
+              <CSSTransition
+                  key={this.props.location.pathname}
+                  timeout={600}
+                  classNames="fade"
+                >
+                    <Switch location={this.props.location}>
+                        <Route path="/:name" render={props => <SubNav {...props} data={this.state.data} />}
+                        />
+                    </Switch>
+              </CSSTransition>
+            </TransitionGroup>
+        </Fragment>
       </div>
     );
   }
